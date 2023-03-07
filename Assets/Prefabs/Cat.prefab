@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 189994158}
   - component: {fileID: 7445251095697722620}
   m_Layer: 0
-  m_Name: CatPrefab
+  m_Name: Cat
   m_TagString: Cat
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
