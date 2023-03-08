@@ -12,6 +12,7 @@ public class HumanController : MonoBehaviour
     [SerializeField] private float _moveDistance = 5f;
     [SerializeField] private float _moveDuration = 2f;
     [SerializeField] private float _rotateDuration = 1f;
+    [SerializeField] private bool _standingStill;
 
     private Sequence sequence;
     
@@ -21,15 +22,18 @@ public class HumanController : MonoBehaviour
         _sensorImage.transform.Rotate(new Vector3(0, 0, _sensorAngle / 2));
         _sensorImage.fillAmount = _sensorAngle / 360;
 
-        sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMove(transform.position + transform.forward * _moveDistance, _moveDuration));
-        sequence.AppendInterval(_idleDuration);
-        sequence.Append(transform.DORotate(transform.rotation.eulerAngles + new Vector3(0, 180, 0), _rotateDuration));
-        sequence.Append(transform.DOMove(transform.position, _moveDuration));
-        sequence.AppendInterval(_idleDuration);
-        sequence.Append(transform.DORotate(transform.rotation.eulerAngles, _rotateDuration));
+        if (!_standingStill)
+        {
+            sequence = DOTween.Sequence();
+            sequence.Append(transform.DOMove(transform.position + transform.forward * _moveDistance, _moveDuration));
+            sequence.AppendInterval(_idleDuration);
+            sequence.Append(transform.DORotate(transform.rotation.eulerAngles + new Vector3(0, 180, 0), _rotateDuration));
+            sequence.Append(transform.DOMove(transform.position, _moveDuration));
+            sequence.AppendInterval(_idleDuration);
+            sequence.Append(transform.DORotate(transform.rotation.eulerAngles, _rotateDuration));
 
-        sequence.SetLoops(-1);
+            sequence.SetLoops(-1);
+        }
     }
 
     private void OnTriggerStay(Collider other)
