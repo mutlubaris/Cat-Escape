@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Television.unity
+    path: Assets/Scenes/Radio.unity
     guid: 0d0c2ac6da92a174c8305be5956cceff
   m_configObjects: {}

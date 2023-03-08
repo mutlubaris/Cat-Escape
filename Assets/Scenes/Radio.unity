@@ -231,8 +231,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1602887602535766919, guid: 7b127c2488d9c5544af1b7404f48da98, type: 3}
+      propertyPath: _distractable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602887602535766919, guid: 7b127c2488d9c5544af1b7404f48da98, type: 3}
+      propertyPath: _reactDuration
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602887602535766919, guid: 7b127c2488d9c5544af1b7404f48da98, type: 3}
       propertyPath: _standingStill
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602887602535766919, guid: 7b127c2488d9c5544af1b7404f48da98, type: 3}
+      propertyPath: _targetMoveDuration
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1602887602535766924, guid: 7b127c2488d9c5544af1b7404f48da98, type: 3}
       propertyPath: m_Name

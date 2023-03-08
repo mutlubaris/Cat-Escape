@@ -9,16 +9,49 @@ public class HumanController : MonoBehaviour
 {
     [SerializeField] private Image _sensorImage;
     [SerializeField] private float _sensorAngle = 90;
-    [SerializeField] private float _idleDuration = 1f;
-    [SerializeField] private float _moveDistance = 5f;
-    [SerializeField] private float _moveDuration = 2f;
-    [SerializeField] private float _rotateDuration = 1f;
+    [SerializeField] private float _patrolIdleDuration = 1f;
+    [SerializeField] private float _patrolDistance = 5f;
+    [SerializeField] private float _patrolMoveDuration = 2f;
+    [SerializeField] private float _patrolRotateDuration = 1f;
+    [SerializeField] private float _quickRotateDuration = .5f;
+    [SerializeField] private float _targetMoveDuration = 2f;
+    [SerializeField] private float _targetOffsetDistance = 1.5f;
+    [SerializeField] private float _reactDuration = 3f;
     [SerializeField] private bool _standingStill;
+    [SerializeField] private bool _distractable;
     [SerializeField] private Transform _bodyTransform;
 
-    private Sequence sequence;
+    private Sequence patrolSequence;
+    private Sequence distractionSequence;
     private bool _caughtTheCat;
-    
+
+    private void OnEnable()
+    {
+        EventManager.OnRadioTurnedOn.AddListener(GoToTarget);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnRadioTurnedOn.RemoveListener(GoToTarget);
+    }
+
+    private void GoToTarget(GameObject target)
+    {
+        if (_distractable)
+        {
+            patrolSequence.Kill();
+
+            distractionSequence = DOTween.Sequence();
+            var currentRotation = transform.rotation;
+            transform.LookAt(target.transform);
+            var targetRotation = transform.rotation;
+            transform.rotation = currentRotation;
+            distractionSequence.AppendInterval(_reactDuration);
+            distractionSequence.Append(transform.DORotateQuaternion(targetRotation, _quickRotateDuration));
+            distractionSequence.Append(transform.DOMove(target.transform.position - (target.transform.position - transform.position).normalized * _targetOffsetDistance, _targetMoveDuration));
+        }
+    }
+
     private void Start()
     {
         _sensorImage.transform.localRotation= Quaternion.identity;
@@ -27,15 +60,15 @@ public class HumanController : MonoBehaviour
 
         if (!_standingStill)
         {
-            sequence = DOTween.Sequence();
-            sequence.Append(transform.DOMove(transform.position + transform.forward * _moveDistance, _moveDuration));
-            sequence.AppendInterval(_idleDuration);
-            sequence.Append(transform.DORotate(transform.rotation.eulerAngles + new Vector3(0, 180, 0), _rotateDuration));
-            sequence.Append(transform.DOMove(transform.position, _moveDuration));
-            sequence.AppendInterval(_idleDuration);
-            sequence.Append(transform.DORotate(transform.rotation.eulerAngles, _rotateDuration));
+            patrolSequence = DOTween.Sequence();
+            patrolSequence.Append(transform.DOMove(transform.position + transform.forward * _patrolDistance, _patrolMoveDuration));
+            patrolSequence.AppendInterval(_patrolIdleDuration);
+            patrolSequence.Append(transform.DORotate(transform.rotation.eulerAngles + new Vector3(0, 180, 0), _patrolRotateDuration));
+            patrolSequence.Append(transform.DOMove(transform.position, _patrolMoveDuration));
+            patrolSequence.AppendInterval(_patrolIdleDuration);
+            patrolSequence.Append(transform.DORotate(transform.rotation.eulerAngles, _patrolRotateDuration));
 
-            sequence.SetLoops(-1);
+            patrolSequence.SetLoops(-1);
         }
     }
 
@@ -48,7 +81,7 @@ public class HumanController : MonoBehaviour
             if (angleBetweenSelfAndCat < _sensorAngle / 2)
             {
                 _caughtTheCat= true;
-                sequence.Kill();
+                patrolSequence.Kill();
                 EventManager.OnCatCaught.Invoke();
 
                 var currentRotation = transform.rotation;
@@ -57,7 +90,7 @@ public class HumanController : MonoBehaviour
                 transform.rotation = currentRotation;
                 transform.DORotateQuaternion(targetRotation, .5f).OnComplete(() =>
                 {
-                    _bodyTransform.DOLocalRotate(new Vector3(0, 360, 0), .5f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).OnComplete(() =>
+                    _bodyTransform.DOLocalRotate(new Vector3(0, 360, 0), _quickRotateDuration, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                     });

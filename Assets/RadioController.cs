@@ -19,6 +19,6 @@ public class RadioController : MonoBehaviour
         _particleSystem.Play();
         _audioSource.Play();
         _canvas.SetActive(false);
-        EventManager.OnRadioTurnedOn.Invoke();
+        EventManager.OnRadioTurnedOn.Invoke(gameObject);
     }
 }
