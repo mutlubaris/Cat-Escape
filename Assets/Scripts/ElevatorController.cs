@@ -19,6 +19,11 @@ public class ElevatorController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Cat") Escalate();
+    }
+
     private void Escalate()
     {
         Sequence elevationSequence = DOTween.Sequence();
