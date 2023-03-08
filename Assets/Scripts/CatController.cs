@@ -11,11 +11,13 @@ public class CatController : MonoBehaviour
     private Vector3 _clickPosition;
     private bool _isControllable;
     private Rigidbody _rigid;
+    private Animator _animator;
 
     private void Start()
     {
         EnableControl();
-        _rigid= GetComponent<Rigidbody>();
+        _rigid = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -59,5 +61,7 @@ public class CatController : MonoBehaviour
         {
             _rigid.velocity = new Vector3(0, _rigid.velocity.y, 0);
         }
+
+        _animator.SetFloat("Speed", new Vector3(_rigid.velocity.x, 0, _rigid.velocity.z).magnitude);
     }
 }
