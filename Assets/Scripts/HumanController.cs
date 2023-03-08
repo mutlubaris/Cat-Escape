@@ -14,8 +14,10 @@ public class HumanController : MonoBehaviour
     [SerializeField] private float _moveDuration = 2f;
     [SerializeField] private float _rotateDuration = 1f;
     [SerializeField] private bool _standingStill;
+    [SerializeField] private Transform _bodyTransform;
 
     private Sequence sequence;
+    private bool _caughtTheCat;
     
     private void Start()
     {
@@ -39,14 +41,28 @@ public class HumanController : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Cat")
+        if (!_caughtTheCat && other.tag == "Cat")
         {
+            _caughtTheCat= true;
             var angleBetweenSelfAndCat = Vector2.Angle(new Vector2(transform.forward.x, transform.forward.z), 
                 new Vector2(other.transform.position.x - transform.position.x, other.transform.position.z - transform.position.z));
             if (angleBetweenSelfAndCat < _sensorAngle / 2)
             {
                 sequence.Kill();
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                EventManager.OnControlDisabled.Invoke();
+
+                var currentRotation = transform.rotation;
+                transform.LookAt(other.transform);
+                var targetRotation = transform.rotation;
+                transform.rotation = currentRotation;
+                transform.DORotateQuaternion(targetRotation, .5f).OnComplete(() =>
+                {
+                    _bodyTransform.DOLocalRotate(new Vector3(0, 360, 0), .5f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).OnComplete(() =>
+                    {
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                    });
+                });
+                
             }
         }
     }

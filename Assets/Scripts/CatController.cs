@@ -9,7 +9,35 @@ public class CatController : MonoBehaviour
     [SerializeField] private float _sensitivity = 1;
 
     private Vector3 _clickPosition;
-    
+    private bool _isControllable;
+
+    private void Start()
+    {
+        EnableControl();
+    }
+
+    private void OnEnable()
+    {
+        EventManager.OnEnabledDisabled.AddListener(EnableControl);
+        EventManager.OnControlDisabled.AddListener(DisableControl);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnEnabledDisabled.RemoveListener(EnableControl);
+        EventManager.OnControlDisabled.RemoveListener(DisableControl);
+    }
+
+    private void EnableControl()
+    {
+        _isControllable = true;
+    }
+
+    private void DisableControl()
+    {
+        _isControllable = false;
+    }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))

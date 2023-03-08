@@ -265,6 +265,8 @@ MonoBehaviour:
   _moveDistance: 4
   _moveDuration: 2
   _rotateDuration: 1
+  _standingStill: 0
+  _bodyTransform: {fileID: 1938039477865509568}
 --- !u!1 &1602887602552160169
 GameObject:
   m_ObjectHideFlags: 0
