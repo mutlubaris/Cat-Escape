@@ -7,6 +7,8 @@ public class CatController : MonoBehaviour
 {
     [SerializeField] private float _maxMovementSpeed = 1;
     [SerializeField] private float _sensitivity = 1;
+    [SerializeField] private AudioSource _walkAudio;
+    [SerializeField] private AudioSource _caughtAudio;
 
     private Vector3 _clickPosition;
     private bool _isControllable;
@@ -40,6 +42,7 @@ public class CatController : MonoBehaviour
     private void DisableControl()
     {
         _isControllable = false;
+        _caughtAudio.Play();
     }
 
     private void Update()
@@ -55,11 +58,13 @@ public class CatController : MonoBehaviour
             var movementVector = movementInput.magnitude > _maxMovementSpeed ? movementInput.normalized * _maxMovementSpeed : movementInput;
             _rigid.velocity = new Vector3(movementVector.x * _maxMovementSpeed, _rigid.velocity.y, movementVector.z * _maxMovementSpeed) ;
             transform.LookAt(transform.position + movementVector);
+            _walkAudio.enabled = true;
         }
 
         else
         {
             _rigid.velocity = new Vector3(0, _rigid.velocity.y, 0);
+            _walkAudio.enabled = false;
         }
 
         _animator.SetFloat("Speed", new Vector3(_rigid.velocity.x, 0, _rigid.velocity.z).magnitude);
