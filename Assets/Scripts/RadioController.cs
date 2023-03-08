@@ -17,7 +17,6 @@ public class RadioController : MonoBehaviour
     {
         _particleSystem.Pause();
         _canvas.SetActive(false);
-
         _arrows.transform.DOLocalMoveY(_arrows.transform.localPosition.y - _arrowMoveDistance, _arrowMoveDuration).SetEase(Ease.InCirc).SetLoops(-1, LoopType.Yoyo);
     }
 
