@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HumanController : MonoBehaviour
@@ -42,7 +43,11 @@ public class HumanController : MonoBehaviour
         {
             var angleBetweenSelfAndCat = Vector2.Angle(new Vector2(transform.forward.x, transform.forward.z), 
                 new Vector2(other.transform.position.x - transform.position.x, other.transform.position.z - transform.position.z));
-            if (angleBetweenSelfAndCat < _sensorAngle / 2) sequence.Kill();
+            if (angleBetweenSelfAndCat < _sensorAngle / 2)
+            {
+                sequence.Kill();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
     }
 }
