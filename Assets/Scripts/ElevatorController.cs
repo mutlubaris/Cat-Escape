@@ -7,15 +7,26 @@ public class ElevatorController : MonoBehaviour
 {
     [SerializeField] private GameObject[] _rearDoors;
     [SerializeField] private GameObject[] _frontDoors;
+    [SerializeField] private GameObject[] _arrows;
+    [SerializeField] private GameObject _canvas;
+    [SerializeField] private float _arrowMoveDuration = .5f;
+    [SerializeField] private float _arrowMoveDistance = 2f;
     [SerializeField] private float _doorMoveDuration = .5f;
     [SerializeField] private float _escalateDuration = 1f;
     [SerializeField] private float _escalateDistance = 1f;
+
+    private bool _elevated;
 
     private void Start()
     {
         foreach (var door in _frontDoors)
         {
             door.transform.localScale = new Vector3(0, 1, 1);
+        }
+
+        foreach (var arrow in _arrows)
+        {
+            arrow.transform.DOLocalMoveY(arrow.transform.localPosition.y - _arrowMoveDistance, _arrowMoveDuration).SetEase(Ease.InCirc).SetLoops(-1, LoopType.Yoyo);
         }
     }
 
@@ -26,6 +37,10 @@ public class ElevatorController : MonoBehaviour
 
     private void Escalate()
     {
+        if(_elevated) return; _elevated = true;
+        
+        _canvas.SetActive(false);
+
         Sequence elevationSequence = DOTween.Sequence();
 
         float temp1 = 0;
