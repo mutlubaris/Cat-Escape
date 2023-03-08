@@ -227,6 +227,7 @@ MonoBehaviour:
   _sensitivity: 0.03
   _walkAudio: {fileID: 5694570070898320446}
   _caughtAudio: {fileID: 1475940973}
+  _isControllable: 1
 --- !u!135 &7445251095697722620
 SphereCollider:
   m_ObjectHideFlags: 0

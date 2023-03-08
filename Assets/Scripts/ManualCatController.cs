@@ -1,23 +1,23 @@
+using PathCreation.Examples;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CatController : MonoBehaviour
+public class ManualCatController : MonoBehaviour
 {
     [SerializeField] private float _maxMovementSpeed = 1;
     [SerializeField] private float _sensitivity = 1;
     [SerializeField] private AudioSource _walkAudio;
     [SerializeField] private AudioSource _caughtAudio;
+    [SerializeField] private bool _isControllable;
 
     private Vector3 _clickPosition;
-    private bool _isControllable;
     private Rigidbody _rigid;
     private Animator _animator;
 
     private void Start()
     {
-        _isControllable = true;
         _rigid = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
     }
