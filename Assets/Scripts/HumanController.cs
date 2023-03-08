@@ -49,7 +49,7 @@ public class HumanController : MonoBehaviour
             {
                 _caughtTheCat= true;
                 sequence.Kill();
-                EventManager.OnControlDisabled.Invoke();
+                EventManager.OnCatCaught.Invoke();
 
                 var currentRotation = transform.rotation;
                 transform.LookAt(other.transform);

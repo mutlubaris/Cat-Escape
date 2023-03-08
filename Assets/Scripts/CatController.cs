@@ -17,29 +17,29 @@ public class CatController : MonoBehaviour
 
     private void Start()
     {
-        EnableControl();
+        _isControllable = true;
         _rigid = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
     }
 
     private void OnEnable()
     {
-        EventManager.OnEnabledDisabled.AddListener(EnableControl);
-        EventManager.OnControlDisabled.AddListener(DisableControl);
+        EventManager.OnLevelComplete.AddListener(ReactToWinning);
+        EventManager.OnCatCaught.AddListener(ReactToBeingCaught);
     }
 
     private void OnDisable()
     {
-        EventManager.OnEnabledDisabled.RemoveListener(EnableControl);
-        EventManager.OnControlDisabled.RemoveListener(DisableControl);
+        EventManager.OnLevelComplete.RemoveListener(ReactToWinning);
+        EventManager.OnCatCaught.RemoveListener(ReactToBeingCaught);
     }
 
-    private void EnableControl()
+    private void ReactToWinning()
     {
-        _isControllable = true;
+        _animator.SetTrigger("Win");
     }
 
-    private void DisableControl()
+    private void ReactToBeingCaught()
     {
         _isControllable = false;
         _caughtAudio.Play();

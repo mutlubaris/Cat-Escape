@@ -14,6 +14,8 @@ public class ElevatorController : MonoBehaviour
     [SerializeField] private float _doorMoveDuration = .5f;
     [SerializeField] private float _escalateDuration = 1f;
     [SerializeField] private float _escalateDistance = 1f;
+    [SerializeField] private AudioSource _openDoorsSound;
+    [SerializeField] private AudioSource _closeDoorsSound;
 
     private bool _elevated;
 
@@ -41,23 +43,30 @@ public class ElevatorController : MonoBehaviour
         Sequence elevationSequence = DOTween.Sequence();
 
         float temp1 = 0;
-        elevationSequence.Append(DOTween.To(() => temp1, x => temp1 = x, 1, _doorMoveDuration).OnUpdate(() =>
+        elevationSequence.Append(DOTween.To(() => temp1, x => temp1 = x, 1, _doorMoveDuration).OnStart(() => 
+        { 
+            _closeDoorsSound.Play(); 
+        }).OnUpdate(() =>
         {
             foreach (var door in _frontDoors)
             {
                 door.transform.localScale = new Vector3(temp1, 1, 1);
             }
+            
         }));
 
         elevationSequence.Append(transform.DOMoveY(_escalateDistance, _escalateDuration));
 
         float temp2 = 1;
-        elevationSequence.Append(DOTween.To(() => temp2, x => temp2 = x, 0, _doorMoveDuration).OnUpdate(() =>
+        elevationSequence.Append(DOTween.To(() => temp2, x => temp2 = x, 0, _doorMoveDuration).OnStart(() =>
+        {
+            _openDoorsSound.Play();
+        }).OnUpdate(() =>
         {
             foreach (var door in _rearDoors)
             {
                 door.transform.localScale = new Vector3(temp2, 1, 1);
-            }
+            }   
         }));
     }
 }

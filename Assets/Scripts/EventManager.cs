@@ -3,6 +3,6 @@ using UnityEngine.Events;
 
 public static class EventManager
 {
-    public static UnityEvent OnControlDisabled = new UnityEvent();
-    public static UnityEvent OnEnabledDisabled = new UnityEvent();
+    public static UnityEvent OnCatCaught = new UnityEvent();
+    public static UnityEvent OnLevelComplete = new UnityEvent();
 }

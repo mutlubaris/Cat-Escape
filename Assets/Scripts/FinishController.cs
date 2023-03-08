@@ -7,6 +7,6 @@ public class FinishController : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Cat") SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if (other.tag == "Cat") EventManager.OnLevelComplete.Invoke();
     }
 }
