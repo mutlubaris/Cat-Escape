@@ -10,10 +10,12 @@ public class CatController : MonoBehaviour
 
     private Vector3 _clickPosition;
     private bool _isControllable;
+    private Rigidbody _rigid;
 
     private void Start()
     {
         EnableControl();
+        _rigid= GetComponent<Rigidbody>();
     }
 
     private void OnEnable()
@@ -45,12 +47,17 @@ public class CatController : MonoBehaviour
             _clickPosition = Input.mousePosition;
         }
 
-        if (Input.GetMouseButton(0))
+        if (_isControllable && Input.GetMouseButton(0))
         {
             var movementInput = new Vector3((Input.mousePosition - _clickPosition).x, 0, (Input.mousePosition - _clickPosition).y) * _sensitivity;
             var movementVector = movementInput.magnitude > _maxMovementSpeed ? movementInput.normalized * _maxMovementSpeed : movementInput;
-            transform.position += movementVector * _maxMovementSpeed * Time.deltaTime;
+            _rigid.velocity = new Vector3(movementVector.x * _maxMovementSpeed, _rigid.velocity.y, movementVector.z * _maxMovementSpeed) ;
             transform.LookAt(transform.position + movementVector);
+        }
+
+        else
+        {
+            _rigid.velocity = new Vector3(0, _rigid.velocity.y, 0);
         }
     }
 }
