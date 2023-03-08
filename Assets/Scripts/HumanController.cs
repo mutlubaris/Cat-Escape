@@ -43,11 +43,11 @@ public class HumanController : MonoBehaviour
     {
         if (!_caughtTheCat && other.tag == "Cat")
         {
-            _caughtTheCat= true;
             var angleBetweenSelfAndCat = Vector2.Angle(new Vector2(transform.forward.x, transform.forward.z), 
                 new Vector2(other.transform.position.x - transform.position.x, other.transform.position.z - transform.position.z));
             if (angleBetweenSelfAndCat < _sensorAngle / 2)
             {
+                _caughtTheCat= true;
                 sequence.Kill();
                 EventManager.OnControlDisabled.Invoke();
 
